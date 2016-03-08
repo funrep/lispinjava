@@ -1,6 +1,7 @@
 package com.funrep.lispinjava;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LispList extends LispValue {
 	public ArrayList<LispValue> list;
@@ -12,7 +13,7 @@ public class LispList extends LispValue {
 	@Override
 	LispValue eval() {
 		LispValue head = list.get(0);
-		if (head.getClass().getSimpleName().equals("LispSymbol")) {
+		if (head instanceof LispSymbol) {
 			LispSymbol sym = (LispSymbol) head;
 			switch (sym.symbol) {
 			case "quote":
@@ -35,6 +36,13 @@ public class LispList extends LispValue {
 				
 				break;
 			}
+		} else if (head.getClass().getSimpleName().equals("LispList")) {
+			LispList headList = (LispList) head;
+			if (headList.list.get(0) instanceof LispLambda) {
+				LispLambda lambda = (LispLambda) headList.list.get(0);
+				List<LispValue> args = list.subList(1, list.size() - 1);
+				lambda.apply(args);
+			}
 		}
 		return null;
 	}
@@ -54,7 +62,7 @@ public class LispList extends LispValue {
 	}
 
 	@Override
-	LispValue apply(ArrayList<LispValue> args) {
+	LispValue apply(List<LispValue> args) {
 		return null;
 	}
 

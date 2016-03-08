@@ -1,6 +1,6 @@
 package com.funrep.lispinjava;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class LispSymbol extends LispValue {
 	public String symbol;
@@ -20,7 +20,7 @@ public class LispSymbol extends LispValue {
 	}
 
 	@Override
-	LispValue apply(ArrayList<LispValue> args) {
+	LispValue apply(List<LispValue> args) {
 		return null;
 	}
 
