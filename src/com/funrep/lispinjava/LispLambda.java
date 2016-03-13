@@ -9,8 +9,10 @@ public class LispLambda extends LispValue {
 	ArrayList<LispValue> body;
 	HashMap<String, LispValue> closure;
 	
-	public LispLambda() {
-		
+	public LispLambda(ArrayList<String> params, ArrayList<LispValue> body) {
+		this.params = params;
+		this.body = body;
+		closure = Environment.env;
 	}
 
 	@Override
@@ -20,17 +22,26 @@ public class LispLambda extends LispValue {
 
 	@Override
 	String show() {
-		return null;
+		String content = "";
+		if (params.size() == 0) {
+			content += "()";
+		} else {
+			for (int i = 0; i < params.size() - 1; i++) {
+				content += params.get(i) + " ";
+			}
+			content += params.get(params.size() - 1);
+		}
+		return "(lambda (" + content + ") ...)";
 	}
 
 	@Override
-	LispValue apply(List<LispValue> args) {
+	ArrayList<LispValue> apply(List<LispValue> args) {
 		ArrayList<LispValue> b = applyArgs(body, args);
 		for (int i = 0; i < b.size(); i++) {
 			LispValue val = b.get(i).eval();
 			b.set(i, val);
 		}
-		return b.get(b.size() - 1);
+		return b;
 	}
 	
 	ArrayList<LispValue> applyArgs(ArrayList<LispValue> body,

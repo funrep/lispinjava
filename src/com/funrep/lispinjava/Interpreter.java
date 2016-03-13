@@ -15,5 +15,12 @@ public class Interpreter {
 		expr2.list.add(new LispString("goodbye world"));
 		System.out.println(expr2.show());
 		System.out.println(expr2.eval().show());
+		LispList expr3 = new LispList();
+		expr3.list.add(new LispPrimitive("+"));
+		expr3.list.add(new LispNumber(5));
+		expr3.list.add(new LispNumber(10));
+		expr3.list.add(new LispNumber(1));
+		System.out.println(expr3.show());
+		System.out.println(expr3.eval().show());
 	}
 }

@@ -1,5 +1,6 @@
 package com.funrep.lispinjava;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LispBool extends LispValue {
@@ -24,7 +25,7 @@ public class LispBool extends LispValue {
 	}
 
 	@Override
-	LispValue apply(List<LispValue> args) {
+	ArrayList<LispValue> apply(List<LispValue> args) {
 		return null;
 	}
 
