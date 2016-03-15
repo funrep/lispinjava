@@ -1,5 +1,7 @@
 package com.funrep.lispinjava;
 
+import java.util.ArrayList;
+
 public class Interpreter {
 
 	public static void main(String[] args) {
@@ -22,5 +24,11 @@ public class Interpreter {
 		expr3.list.add(new LispNumber(1));
 		System.out.println(expr3.show());
 		System.out.println(expr3.eval().show());
+		ArrayList<String> ss = Parsing.tokenize("(1 2 3)");
+		for (String s : ss) {
+			System.out.println(s);
+		}
+		LispList expr4 = Parsing.parse(ss.subList(1, ss.size()));
+		System.out.println(expr4.show());
 	}
 }

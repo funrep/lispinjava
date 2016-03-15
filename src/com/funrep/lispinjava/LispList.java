@@ -32,15 +32,12 @@ public class LispList extends LispValue {
 				} else {
 					return alt.eval();
 				}
-			case "lambda":
-				
-				break;
 			}
 		} else if (head.getClass().getSimpleName().equals("LispList")) {
 			LispList headList = (LispList) head;
 			if (headList.list.get(0) instanceof LispLambda) {
 				LispLambda lambda = (LispLambda) headList.list.get(0);
-				List<LispValue> args = list.subList(1, list.size() - 1);
+				List<LispValue> args = list.subList(1, list.size());
 				ArrayList<LispValue> body = lambda.apply(args);
 				for (int i = 0; i < body.size(); i++) {
 					body.set(i, body.get(i).eval());
@@ -49,7 +46,7 @@ public class LispList extends LispValue {
 			}
 		} else if (head instanceof LispPrimitive) {
 			LispPrimitive func = (LispPrimitive) head;
-			List<LispValue> args = list.subList(1, list.size() - 1);
+			List<LispValue> args = list.subList(1, list.size());
 			return func.apply(args).get(0);
 		}
 		return null;
