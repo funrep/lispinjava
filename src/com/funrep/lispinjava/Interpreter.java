@@ -28,7 +28,7 @@ public class Interpreter {
 		for (String s : ss) {
 			System.out.println(s);
 		}
-		LispList expr4 = Parsing.parse(ss.subList(1, ss.size()));
+		LispList expr4 = Parsing.parse(ss);
 		System.out.println(expr4.show());
 	}
 }

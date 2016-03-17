@@ -10,7 +10,14 @@ public class Parsing {
 	}
 	public static ArrayList<String> tokenize(String s) {
 		String[] ss = s.replaceAll("\\(", " ( ").replaceAll("\\)", " ) ").split(" ");
-		return new ArrayList<String>(Arrays.asList(ss));
+		ArrayList<String> tokens = new ArrayList<String>();
+		for (int i = 0; i < ss.length; i++) {
+			boolean isWhitespace = ss[i].matches("^\\s*$");
+			if (!isWhitespace) {
+				tokens.add(ss[i]);
+			}
+		}
+		return tokens;
 	}
 
 	public static LispList parse(List<String> tokens) {
