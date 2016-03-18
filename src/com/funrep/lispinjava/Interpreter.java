@@ -1,10 +1,27 @@
 package com.funrep.lispinjava;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Interpreter {
 
 	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Lisp In Java REPL");
+		String input, result;
+		do {
+			System.out.print("> ");
+			input = sc.nextLine();
+			try {
+				result = Parsing.magic(input).eval().show();
+			} catch (Exception e){
+				result = "errorZ";
+			}
+			System.out.println(result);
+		} while (input != "exit");
+	}
+	
+	public static void testing() {
 		LispList expr = new LispList();
 		expr.list.add(new LispSymbol("quote"));
 		expr.list.add(new LispNumber(5));
@@ -24,11 +41,12 @@ public class Interpreter {
 		expr3.list.add(new LispNumber(1));
 		System.out.println(expr3.show());
 		System.out.println(expr3.eval().show());
-		ArrayList<String> ss = Parsing.tokenize("(1 2 3)");
+		ArrayList<String> ss = Parsing.tokenize("(if true 1 2)");
 		for (String s : ss) {
 			System.out.println(s);
 		}
 		LispList expr4 = Parsing.parse(ss);
 		System.out.println(expr4.show());
+		System.out.println(expr4.eval().show());
 	}
 }
