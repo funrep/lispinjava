@@ -1,24 +1,36 @@
 package com.funrep.lispinjava;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Interpreter {
 
 	public static void main(String[] args) {
+		Environment.initEnv();
+		String s = "(lambda (x y) (+ x y))";
+		List<String> tokens = Parsing.tokenize(s);
+		LispList expr = Parsing.parse(tokens);
+		System.out.println(expr.show());
+		System.out.println(expr.eval().show());
+	}
+	
+	public static void repl() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Lisp In Java REPL");
 		String input, result;
 		do {
 			System.out.print("> ");
 			input = sc.nextLine();
-			try {
+			result = Parsing.magic(input).eval().show();
+			/*try {
 				result = Parsing.magic(input).eval().show();
 			} catch (Exception e){
 				result = "errorZ";
-			}
+			}*/
 			System.out.println(result);
 		} while (input != "exit");
+		sc.close();
 	}
 	
 	public static void testing() {

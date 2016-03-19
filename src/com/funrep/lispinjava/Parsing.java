@@ -27,6 +27,7 @@ public class Parsing {
 		if (tokens.get(0).equals("(")) {
 			LispList expr = new LispList();
 			int i = 1;
+			boolean lambdaFlag = false;
 			while ((!tokens.get(i).equals(")") && (i < tokens.size()))) {
 				switch (tokens.get(i)) {
 				case "true":
@@ -36,7 +37,27 @@ public class Parsing {
 					expr.list.add(new LispBool(false));
 					break;
 				case "lambda":
-					// do stuff
+					List<String> subTokens = tokens.subList(i + 1, tokens.size());
+					LispList symbols = parse(subTokens);
+					LispLambda lambda = new LispLambda(new ArrayList<String>(), new ArrayList<LispValue>());
+					for (LispValue s : symbols.list) {
+						if (s instanceof LispSymbol) {
+							lambda.params.add(((LispSymbol) s).symbol);
+						} else {
+							System.out.println("Lambda param error");
+						}
+					}
+					int endOfParams = -1;
+					for (int j = i + 1; j < tokens.size(); j++) {
+						if (tokens.get(j).equals(")")) {
+							endOfParams = j;
+							break;
+						}
+					}
+					List<String> subTokens2 = tokens.subList(endOfParams + 1, tokens.size());
+					lambda.body = parse(subTokens2).list;
+					expr.list.add(lambda);
+					lambdaFlag = true;
 					break;
 				default:
 					if (tokens.get(i).charAt(0) == '"') {
@@ -53,6 +74,9 @@ public class Parsing {
 					}
 				}
 				i++;
+				if (lambdaFlag) {
+					break;
+				}
 			}
 			return expr;
 		}

@@ -26,7 +26,7 @@ public class LispLambda extends LispValue {
 		if (params.size() == 0) {
 			content += "()";
 		} else {
-			for (int i = 0; i < params.size() - 1; i++) {
+			for (int i = 0; i < params.size()	; i++) {
 				content += params.get(i) + " ";
 			}
 			content += params.get(params.size() - 1);
