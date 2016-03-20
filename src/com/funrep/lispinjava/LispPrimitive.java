@@ -1,13 +1,15 @@
 package com.funrep.lispinjava;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LispPrimitive extends LispValue {
-	String function;
+	public String function;
+	public HashMap<String, LispValue> env;
 	
-	public LispPrimitive(String func) {
+	public LispPrimitive(HashMap<String, LispValue> env, String func) {
 		function = func;
+		this.env = env;
 	}
 
 	@Override
@@ -21,9 +23,9 @@ public class LispPrimitive extends LispValue {
 	}
 
 	@Override
-	ArrayList<LispValue> apply(List<LispValue> args) {
-		ArrayList<LispValue> result = new ArrayList<LispValue>();
-		result.add(callBuiltIn(args));
+	LispList apply(List<LispValue> args) {
+		LispList result = new LispList(env);
+		result.list.add(callBuiltIn(args));
 		return result;
 	}
 	
@@ -35,15 +37,20 @@ public class LispPrimitive extends LispValue {
 				LispNumber num = (LispNumber) val;
 				sum += num.number;
 			}
-			return new LispNumber(sum);
+			return new LispNumber(env, sum);
 		case "-":
 			double sum1 = 0;
 			for (LispValue val : args) {
 				LispNumber num = (LispNumber) val;
 				sum1 -= num.number;
 			}
-			return new LispNumber(sum1);
+			return new LispNumber(env, sum1);
 		}
 		return null;
 	}
+
+	@Override
+    HashMap<String, LispValue> getEnv() {
+	    return env;
+    }
 }

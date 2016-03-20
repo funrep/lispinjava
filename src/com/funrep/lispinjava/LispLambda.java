@@ -6,13 +6,16 @@ import java.util.List;
 
 public class LispLambda extends LispValue {
 	ArrayList<String> params;
-	ArrayList<LispValue> body;
+	LispList body;
 	HashMap<String, LispValue> closure;
+	HashMap<String, LispValue> env;
 	
-	public LispLambda(ArrayList<String> params, ArrayList<LispValue> body) {
+	public LispLambda(HashMap<String, LispValue> env, ArrayList<String> params,
+			LispList body) {
 		this.params = params;
 		this.body = body;
-		closure = Environment.env;
+		closure = Environment.env; // ?
+		this.env = env;
 	}
 
 	@Override
@@ -26,7 +29,7 @@ public class LispLambda extends LispValue {
 		if (params.size() == 0) {
 			content += "()";
 		} else {
-			for (int i = 0; i < params.size()	; i++) {
+			for (int i = 0; i < params.size() - 1; i++) {
 				content += params.get(i) + " ";
 			}
 			content += params.get(params.size() - 1);
@@ -35,13 +38,11 @@ public class LispLambda extends LispValue {
 	}
 
 	@Override
-	ArrayList<LispValue> apply(List<LispValue> args) {
-		ArrayList<LispValue> b = applyArgs(body, args);
-		for (int i = 0; i < b.size(); i++) {
-			LispValue val = b.get(i).eval();
-			b.set(i, val);
+	LispList apply(List<LispValue> args) {
+		for (int i = 0; i < params.size(); i++) {
+			env.put(params.get(i), args.get(i));
 		}
-		return b;
+		return body;
 	}
 	
 	ArrayList<LispValue> applyArgs(ArrayList<LispValue> body,
@@ -58,5 +59,10 @@ public class LispLambda extends LispValue {
 		}
 		return body;
 	}
+
+	@Override
+    HashMap<String, LispValue> getEnv() {
+	    return env;
+    }
 
 }

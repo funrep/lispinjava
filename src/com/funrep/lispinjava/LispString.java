@@ -1,13 +1,15 @@
 package com.funrep.lispinjava;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LispString extends LispValue {
 	public String string;
+	public HashMap<String, LispValue> env;
 
-	public LispString(String s) {
+	public LispString(HashMap<String, LispValue> env, String s) {
 		string = s;
+		this.env = env;
 	}
 	
 	@Override
@@ -21,8 +23,13 @@ public class LispString extends LispValue {
 	}
 
 	@Override
-	ArrayList<LispValue> apply(List<LispValue> args) {
+	LispList apply(List<LispValue> args) {
 		return null;
 	}
+
+	@Override
+    HashMap<String, LispValue> getEnv() {
+	    return env;
+    }
 
 }

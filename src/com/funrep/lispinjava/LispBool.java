@@ -1,13 +1,15 @@
 package com.funrep.lispinjava;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LispBool extends LispValue {
 	public boolean bool;
+	public HashMap<String, LispValue> env;
 	
-	public LispBool(boolean b) {
+	public LispBool(HashMap<String, LispValue> env, boolean b) {
 		bool = b;
+		this.env = env;
 	}
 
 	@Override
@@ -25,8 +27,13 @@ public class LispBool extends LispValue {
 	}
 
 	@Override
-	ArrayList<LispValue> apply(List<LispValue> args) {
+	LispList apply(List<LispValue> args) {
 		return null;
 	}
+
+	@Override
+    HashMap<String, LispValue> getEnv() {
+	    return env;
+    }
 
 }

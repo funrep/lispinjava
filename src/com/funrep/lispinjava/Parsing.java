@@ -1,11 +1,12 @@
 package com.funrep.lispinjava;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Parsing {
-	public static LispList magic(String s) {
-		return parse(tokenize(s));
+	public static LispList magic(HashMap<String, LispValue> env, String s) {
+		return parse(env, tokenize(s));
 	}
 	public static ArrayList<String> tokenize(String s) {
 		String[] ss = s.replaceAll("\\(", " ( ").replaceAll("\\)", " ) ").split(" ");
@@ -19,27 +20,27 @@ public class Parsing {
 		return tokens;
 	}
 
-	public static LispList parse(List<String> tokens) {
+	public static LispList parse(HashMap<String, LispValue> env, List<String> tokens) {
 		if (tokens.size() == 0) {
 			throw new Error("Empty string passed to AST.parse");
 		}
 		
 		if (tokens.get(0).equals("(")) {
-			LispList expr = new LispList();
+			LispList expr = new LispList(env);
 			int i = 1;
 			boolean lambdaFlag = false;
 			while ((!tokens.get(i).equals(")") && (i < tokens.size()))) {
 				switch (tokens.get(i)) {
 				case "true":
-					expr.list.add(new LispBool(true));
+					expr.list.add(new LispBool(env, true));
 					break;
 				case "false":
-					expr.list.add(new LispBool(false));
+					expr.list.add(new LispBool(env, false));
 					break;
 				case "lambda":
 					List<String> subTokens = tokens.subList(i + 1, tokens.size());
-					LispList symbols = parse(subTokens);
-					LispLambda lambda = new LispLambda(new ArrayList<String>(), new ArrayList<LispValue>());
+					LispList symbols = parse(env, subTokens);
+					LispLambda lambda = new LispLambda(env, new ArrayList<String>(), new LispList(env));
 					for (LispValue s : symbols.list) {
 						if (s instanceof LispSymbol) {
 							lambda.params.add(((LispSymbol) s).symbol);
@@ -55,21 +56,21 @@ public class Parsing {
 						}
 					}
 					List<String> subTokens2 = tokens.subList(endOfParams + 1, tokens.size());
-					lambda.body = parse(subTokens2).list;
+					lambda.body = parse(env, subTokens2);
 					expr.list.add(lambda);
 					lambdaFlag = true;
 					break;
 				default:
 					if (tokens.get(i).charAt(0) == '"') {
-						expr.list.add(new LispString(tokens.get(i).replaceAll("\"", "")));
+						expr.list.add(new LispString(env, tokens.get(i).replaceAll("\"", "")));
 						break;
 					} else if (isNumber(tokens.get(i).charAt(0))) {
-						expr.list.add(new LispNumber(Double.parseDouble(tokens.get(i))));
+						expr.list.add(new LispNumber(env, Double.parseDouble(tokens.get(i))));
 						break;
 					} else if (tokens.get(i).equals("(")) {
-						expr.list.add(parse(tokens.subList(i + 1, tokens.size())));
+						expr.list.add(parse(env, tokens.subList(i + 1, tokens.size())));
 					} else {
-						expr.list.add(new LispSymbol(tokens.get(i)));
+						expr.list.add(new LispSymbol(env, tokens.get(i)));
 						break;
 					}
 				}
@@ -80,7 +81,7 @@ public class Parsing {
 			}
 			return expr;
 		}
-		
+		System.out.println("null in Parsing.parse()");
 		return null;
 	}
 	

@@ -1,13 +1,16 @@
 package com.funrep.lispinjava;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LispList extends LispValue {
 	public ArrayList<LispValue> list;
+	public HashMap<String, LispValue> env;
 	
-	public LispList() {
+	public LispList(HashMap<String, LispValue> env) {
 		list = new ArrayList<LispValue>();
+		this.env = env;
 	}
 
 	@Override
@@ -21,7 +24,7 @@ public class LispList extends LispValue {
 			case "define":
 				LispSymbol var = (LispSymbol) list.get(1);
 				LispValue val = list.get(2).eval();
-				Environment.env.put(var.symbol, val);
+				env.put(var.symbol, val);
 				return val;
 			case "if":
 				LispBool pred = (LispBool) list.get(1).eval();
@@ -32,23 +35,24 @@ public class LispList extends LispValue {
 				} else {
 					return alt.eval();
 				}
-			}
-		} else if (head.getClass().getSimpleName().equals("LispList")) {
-			LispList headList = (LispList) head;
-			if (headList.list.get(0) instanceof LispLambda) {
-				LispLambda lambda = (LispLambda) headList.list.get(0);
-				List<LispValue> args = list.subList(1, list.size());
-				ArrayList<LispValue> body = lambda.apply(args);
-				for (int i = 0; i < body.size(); i++) {
-					body.set(i, body.get(i).eval());
+			default:
+				LispValue mapping = sym.eval();
+				if (mapping instanceof LispPrimitive) {
+					LispPrimitive func = (LispPrimitive) mapping;
+					List<LispValue> args = list.subList(1, list.size());
+					return func.apply(args).list.get(0);
+				} else {
+					break;
 				}
-				return body.get(body.size() - 1);
 			}
-		} else if (head instanceof LispPrimitive) {
-			LispPrimitive func = (LispPrimitive) head;
+		} else if (head instanceof LispLambda) {
+			LispLambda lambda = (LispLambda) head;
 			List<LispValue> args = list.subList(1, list.size());
-			return func.apply(args).get(0);
+			LispList body = lambda.apply(args);
+			env = lambda.env;
+			return body.eval();
 		}
+		System.out.println("null in LispList.eval()");
 		return null;
 	}
 
@@ -67,8 +71,13 @@ public class LispList extends LispValue {
 	}
 
 	@Override
-	ArrayList<LispValue> apply(List<LispValue> args) {
+	LispList apply(List<LispValue> args) {
 		return null;
 	}
+
+	@Override
+    HashMap<String, LispValue> getEnv() {
+	    return env;
+    }
 
 }
