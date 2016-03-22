@@ -7,9 +7,10 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Environment.initEnv();
-		String s = "(lambda (x y) (+ x y))";
+		String s = "((lambda (x) (- x x)) 5)";
+		System.out.println(s);
 		List<String> tokens = Parsing.tokenize(s);
-		LispList expr = Parsing.parse(Environment.env, tokens);
+		LispList expr = Parsing.parse(Environment.env, tokens).right;
 		System.out.println(expr.getClass().getSimpleName());
 		for (LispValue val : expr.list) {
 			System.out.println(val.getClass().getSimpleName());

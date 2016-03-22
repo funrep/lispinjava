@@ -41,16 +41,23 @@ public class LispList extends LispValue {
 					LispPrimitive func = (LispPrimitive) mapping;
 					List<LispValue> args = list.subList(1, list.size());
 					return func.apply(args).list.get(0);
+				} else if (mapping instanceof LispLambda) {
+					LispLambda lambda = (LispLambda) mapping;
+					List<LispValue> args = list.subList(1, list.size());
+					return lambda.apply(args).eval();
 				} else {
 					break;
 				}
 			}
-		} else if (head instanceof LispLambda) {
-			LispLambda lambda = (LispLambda) head;
-			List<LispValue> args = list.subList(1, list.size());
-			LispList body = lambda.apply(args);
-			env = lambda.env;
-			return body.eval();
+		} else if (head instanceof LispList) {
+			LispList headList = (LispList) head;
+			if (headList.list.get(0) instanceof LispLambda) {
+				LispLambda lambda = (LispLambda) headList.list.get(0);
+				List<LispValue> args = list.subList(1, list.size());
+				LispList body = lambda.apply(args);
+				env = lambda.env;
+				return body.eval();
+			}
 		}
 		System.out.println("null in LispList.eval()");
 		return null;

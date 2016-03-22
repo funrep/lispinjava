@@ -1,5 +1,6 @@
 package com.funrep.lispinjava;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +26,11 @@ public class LispPrimitive extends LispValue {
 	@Override
 	LispList apply(List<LispValue> args) {
 		LispList result = new LispList(env);
-		result.list.add(callBuiltIn(args));
+		ArrayList<LispValue> evalArgs = new ArrayList<LispValue>();
+		for (LispValue val : args) {
+			evalArgs.add(val.eval());
+		}
+		result.list.add(callBuiltIn(evalArgs));
 		return result;
 	}
 	

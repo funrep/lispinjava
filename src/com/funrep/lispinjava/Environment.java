@@ -1,5 +1,6 @@
 package com.funrep.lispinjava;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Environment {
@@ -8,5 +9,12 @@ public class Environment {
 	static public void initEnv() {
 		env.put("+", new LispPrimitive(env, "+"));
 		env.put("-", new LispPrimitive(env, "-"));
+		LispLambda f = new LispLambda(env, new ArrayList<String>(), new LispList(env));
+		f.body.list.add(new LispSymbol(env, "+"));
+		f.body.list.add(new LispSymbol(env, "x"));
+		f.body.list.add(new LispSymbol(env, "y"));
+		f.params.add("x");
+		f.params.add("y");
+		env.put("f", f);
 	}
 }
