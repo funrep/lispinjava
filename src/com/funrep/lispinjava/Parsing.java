@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Parsing {
 	public static LispList magic(HashMap<String, LispValue> env, String s) {
-		return parse(env, tokenize(s)).right;
+		return parse(env, tokenize(s), 1).right;
 	}
 	public static ArrayList<String> tokenize(String s) {
 		String[] ss = s.replaceAll("\\(", " ( ").replaceAll("\\)", " ) ").split(" ");
@@ -20,16 +20,17 @@ public class Parsing {
 		return tokens;
 	}
 
-	public static Tuple<LispList, Integer> parse(HashMap<String, LispValue> env, List<String> tokens) {
+	public static Tuple<LispList, Integer> parse(HashMap<String, LispValue> env, List<String> tokens, int foo) {
 		if (tokens.size() == 0) {
 			throw new Error("Empty string passed to AST.parse");
 		}
 		int num = 0;
+		Tuple<LispList, Integer> result;
 		if (tokens.get(0).equals("(")) {
 			LispList expr = new LispList(env);
-			int i = 1;
+			int i = foo;
 			boolean lambdaFlag = false;
-			while ((!tokens.get(i).equals(")") && (i < tokens.size()))) {
+			while ((!tokens.get(i).equals(")") /* && (i < tokens.size())*/)) {
 				switch (tokens.get(i)) {
 				case "true":
 					expr.list.add(new LispBool(env, true));
@@ -39,7 +40,9 @@ public class Parsing {
 					break;
 				case "lambda":
 					List<String> subTokens = tokens.subList(i + 1, tokens.size());
-					LispList symbols = parse(env, subTokens).right;
+					result = parse(env, subTokens, 1);
+					LispList symbols = result.right;
+					num += result.left;
 					LispLambda lambda = new LispLambda(env, new ArrayList<String>(), new LispList(env));
 					for (LispValue s : symbols.list) {
 						if (s instanceof LispSymbol) {
@@ -56,7 +59,10 @@ public class Parsing {
 						}
 					}
 					List<String> subTokens2 = tokens.subList(endOfParams + 1, tokens.size());
-					lambda.body = parse(env, subTokens2).right;
+					result = parse(env, subTokens2, 1);
+					lambda.body = result.right;
+					num += result.left;
+					i = result.left;
 					expr.list.add(lambda);
 					lambdaFlag = true;
 					break;
@@ -68,8 +74,9 @@ public class Parsing {
 						expr.list.add(new LispNumber(env, Double.parseDouble(tokens.get(i))));
 						break;
 					} else if (tokens.get(i).equals("(")) {
-						expr.list.add(parse(env, tokens.subList(i, tokens.size())).right);
-						// tokens.subList(i + 1, tokens.size()
+						result = parse(env, tokens.subList(i, tokens.size()), 1);
+						expr.list.add(result.right);
+						i = result.left;
 					} else {
 						expr.list.add(new LispSymbol(env, tokens.get(i)));
 						break;
@@ -79,8 +86,9 @@ public class Parsing {
 				if (lambdaFlag) {
 					break;
 				}
-				num = i;
+				num += i;
 			}
+			System.out.println(expr.show() + " " + num);
 			return new Tuple<LispList, Integer>(expr, num);
 		}
 		System.out.println("null in Parsing.parse()");
