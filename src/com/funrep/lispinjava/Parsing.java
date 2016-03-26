@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Parsing {
 	public static LispList magic(HashMap<String, LispValue> env, String s) {
-		return parse(env, tokenize(s), 1).right;
+		return parse(env, tokenize(s), 1).left;
 	}
 	public static ArrayList<String> tokenize(String s) {
 		String[] ss = s.replaceAll("\\(", " ( ").replaceAll("\\)", " ) ").split(" ");
@@ -41,8 +41,8 @@ public class Parsing {
 				case "lambda":
 					List<String> subTokens = tokens.subList(i + 1, tokens.size());
 					result = parse(env, subTokens, 1);
-					LispList symbols = result.right;
-					num += result.left;
+					LispList symbols = result.left;
+					num += result.right;
 					LispLambda lambda = new LispLambda(env, new ArrayList<String>(), new LispList(env));
 					for (LispValue s : symbols.list) {
 						if (s instanceof LispSymbol) {
@@ -60,9 +60,9 @@ public class Parsing {
 					}
 					List<String> subTokens2 = tokens.subList(endOfParams + 1, tokens.size());
 					result = parse(env, subTokens2, 1);
-					lambda.body = result.right;
-					num += result.left;
-					i = result.left;
+					lambda.body = result.left;
+					num += result.right;
+					i = result.right;
 					expr.list.add(lambda);
 					lambdaFlag = true;
 					break;
@@ -75,8 +75,8 @@ public class Parsing {
 						break;
 					} else if (tokens.get(i).equals("(")) {
 						result = parse(env, tokens.subList(i, tokens.size()), 1);
-						expr.list.add(result.right);
-						i = result.left;
+						expr.list.add(result.left);
+						i = result.right;
 					} else {
 						expr.list.add(new LispSymbol(env, tokens.get(i)));
 						break;

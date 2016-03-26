@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Interpreter {
 
 	public static void main(String[] args) {
-		Environment.initEnv();
+		/* Environment.initEnv();
 		String s = "((lambda (x) (- x x)) 5)";
 		System.out.println(s);
 		List<String> tokens = Parsing.tokenize(s);
@@ -20,7 +20,8 @@ public class Interpreter {
 			System.out.println(val.getClass().getSimpleName());
 		}
 		System.out.println(expr.show());
-		System.out.println(expr.eval().show());
+		System.out.println(expr.eval().show());*/
+		repl();
 	}
 	
 	public static void repl() {
