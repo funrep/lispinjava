@@ -20,7 +20,7 @@ public class Parsing {
 		return tokens;
 	}
 
-	public static Tuple<LispList, Integer> parse(HashMap<String, LispValue> env, List<String> tokens, int foo) {
+	public static Tuple<LispList, Integer> parse(HashMap<String, LispValue> env, List<String> tokens, int startPos) {
 		if (tokens.size() == 0) {
 			throw new Error("Empty string passed to AST.parse");
 		}
@@ -28,9 +28,9 @@ public class Parsing {
 		Tuple<LispList, Integer> result;
 		if (tokens.get(0).equals("(")) {
 			LispList expr = new LispList(env);
-			int i = foo;
+			int i = startPos;
 			boolean lambdaFlag = false;
-			while ((!tokens.get(i).equals(")") /* && (i < tokens.size())*/)) {
+			while ((!tokens.get(i).equals(")") && (i < tokens.size()))) {
 				switch (tokens.get(i)) {
 				case "true":
 					expr.list.add(new LispBool(env, true));
@@ -39,6 +39,7 @@ public class Parsing {
 					expr.list.add(new LispBool(env, false));
 					break;
 				case "lambda":
+					num += 7; // lambda's symbol and parentheses tokens
 					List<String> subTokens = tokens.subList(i + 1, tokens.size());
 					result = parse(env, subTokens, 1);
 					LispList symbols = result.left;
@@ -77,6 +78,7 @@ public class Parsing {
 						result = parse(env, tokens.subList(i, tokens.size()), 1);
 						expr.list.add(result.left);
 						i = result.right;
+						break;
 					} else {
 						expr.list.add(new LispSymbol(env, tokens.get(i)));
 						break;
@@ -86,9 +88,9 @@ public class Parsing {
 				if (lambdaFlag) {
 					break;
 				}
-				num += i;
+				num += 1;
 			}
-			System.out.println(expr.show() + " " + num);
+			// System.out.println(expr.show() + " " + num);
 			return new Tuple<LispList, Integer>(expr, num);
 		}
 		System.out.println("null in Parsing.parse()");

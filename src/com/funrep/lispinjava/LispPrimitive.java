@@ -44,10 +44,11 @@ public class LispPrimitive extends LispValue {
 			}
 			return new LispNumber(env, sum);
 		case "-":
-			double sum1 = 0;
-			for (LispValue val : args) {
-				LispNumber num = (LispNumber) val;
-				sum1 -= num.number;
+			LispNumber n = (LispNumber) args.get(0);
+			double sum1 = n.number;
+			for (int i = 1; i < args.size(); i++) {
+				n = (LispNumber) args.get(i);
+				sum1 -= n.number;
 			}
 			return new LispNumber(env, sum1);
 		}
