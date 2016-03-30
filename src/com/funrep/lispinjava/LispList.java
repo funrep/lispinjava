@@ -23,7 +23,12 @@ public class LispList extends LispValue {
 				return list.get(1);
 			case "define":
 				LispSymbol var = (LispSymbol) list.get(1);
-				LispValue val = list.get(2).eval();
+				LispValue val = list.get(2);
+				if (val instanceof LispList) {
+					val = ((LispList) val).list.get(0).eval();
+				} else {
+					val = val.eval();
+				}
 				env.put(var.symbol, val);
 				return val;
 			case "if":

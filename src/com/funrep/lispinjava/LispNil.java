@@ -3,12 +3,10 @@ package com.funrep.lispinjava;
 import java.util.HashMap;
 import java.util.List;
 
-public class LispString extends LispValue {
-	public String string;
+public class LispNil extends LispValue {
 	public HashMap<String, LispValue> env;
 
-	public LispString(HashMap<String, LispValue> env, String s) {
-		string = s;
+	public LispNil(HashMap<String, LispValue> env) {
 		this.env = env;
 	}
 	
@@ -19,7 +17,7 @@ public class LispString extends LispValue {
 
 	@Override
 	String show() {
-		return "\"" + string + "\"";
+		return "nil";
 	}
 
 	@Override
