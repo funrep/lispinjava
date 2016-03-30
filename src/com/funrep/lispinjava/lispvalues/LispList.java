@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.funrep.lispinjava.errors.EvalError;
+
 public class LispList extends LispValue {
 	public ArrayList<LispValue> list;
 	public HashMap<String, LispValue> env;
@@ -49,7 +51,12 @@ public class LispList extends LispValue {
 				} else if (mapping instanceof LispLambda) {
 					LispLambda lambda = (LispLambda) mapping;
 					List<LispValue> args = list.subList(1, list.size());
-					return lambda.apply(args).eval();
+					LispList body = lambda.apply(args);
+					if (body.list.get(0) instanceof LispError) {
+						return body.list.get(0);
+					} else {
+						return body.eval();
+					}
 				} else {
 					break;
 				}
@@ -61,11 +68,14 @@ public class LispList extends LispValue {
 				List<LispValue> args = list.subList(1, list.size());
 				LispList body = lambda.apply(args);
 				env = lambda.env;
-				return body.eval();
+				if (body.list.get(0) instanceof LispError) {
+					return body.list.get(0);
+				} else {
+					return body.eval();
+				}
 			}
 		}
-		System.out.println("null in LispList.eval()");
-		return null;
+		return new EvalError();
 	}
 
 	@Override

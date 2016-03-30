@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.funrep.lispinjava.Environment;
+import com.funrep.lispinjava.errors.ArgCountError;
 
 public class LispLambda extends LispValue {
 	public ArrayList<String> params;
@@ -41,10 +42,16 @@ public class LispLambda extends LispValue {
 
 	@Override
 	LispList apply(List<LispValue> args) {
-		for (int i = 0; i < params.size(); i++) {
-			env.put(params.get(i), args.get(i));
+		if (params.size() == args.size()) {
+			for (int i = 0; i < params.size(); i++) {
+				env.put(params.get(i), args.get(i));
+			}
+			return body;
+		} else {
+			LispList error = new LispList(env);
+			error.list.add(new ArgCountError());
+			return error;
 		}
-		return body;
 	}
 	
 	ArrayList<LispValue> applyArgs(ArrayList<LispValue> body,
