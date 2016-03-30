@@ -1,4 +1,4 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class LispList extends LispValue {
 	}
 
 	@Override
-	LispValue eval() {
+    public LispValue eval() {
 		LispValue head = list.get(0);
 		if (head instanceof LispSymbol) {
 			LispSymbol sym = (LispSymbol) head;
@@ -69,7 +69,7 @@ public class LispList extends LispValue {
 	}
 
 	@Override
-	String show() {
+	public String show() {
 		if (list.size() == 0) {
 			return "()";
 		} else {
@@ -88,7 +88,7 @@ public class LispList extends LispValue {
 	}
 
 	@Override
-    HashMap<String, LispValue> getEnv() {
+	public HashMap<String, LispValue> getEnv() {
 	    return env;
     }
 

@@ -1,11 +1,11 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.HashMap;
 import java.util.List;
 
 public abstract class LispValue {
 	abstract LispValue eval();
-	abstract String show();
+	public abstract String show();
 	abstract LispList apply(List<LispValue> args);
-	abstract HashMap<String, LispValue> getEnv();
+	public abstract HashMap<String, LispValue> getEnv();
 }

@@ -1,12 +1,14 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.funrep.lispinjava.Environment;
+
 public class LispLambda extends LispValue {
-	ArrayList<String> params;
-	LispList body;
+	public ArrayList<String> params;
+	public LispList body;
 	HashMap<String, LispValue> closure;
 	HashMap<String, LispValue> env;
 	
@@ -24,7 +26,7 @@ public class LispLambda extends LispValue {
 	}
 
 	@Override
-	String show() {
+	public String show() {
 		String content = "";
 		if (params.size() == 0) {
 			content += "()";
@@ -61,7 +63,7 @@ public class LispLambda extends LispValue {
 	}
 
 	@Override
-    HashMap<String, LispValue> getEnv() {
+	public HashMap<String, LispValue> getEnv() {
 	    return env;
     }
 

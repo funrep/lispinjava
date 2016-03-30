@@ -1,8 +1,17 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.parsing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.funrep.lispinjava.lispvalues.LispBool;
+import com.funrep.lispinjava.lispvalues.LispLambda;
+import com.funrep.lispinjava.lispvalues.LispList;
+import com.funrep.lispinjava.lispvalues.LispNumber;
+import com.funrep.lispinjava.lispvalues.LispString;
+import com.funrep.lispinjava.lispvalues.LispSymbol;
+import com.funrep.lispinjava.lispvalues.LispValue;
+import com.funrep.lispinjava.utils.Tuple;
 
 public class Parsing {
 	public static LispList magic(HashMap<String, LispValue> env, String s) {

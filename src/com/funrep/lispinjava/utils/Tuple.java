@@ -1,4 +1,4 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.utils;
 
 public class Tuple<T1, T2> {
 	public T1 left;

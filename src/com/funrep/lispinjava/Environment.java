@@ -3,6 +3,12 @@ package com.funrep.lispinjava;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.funrep.lispinjava.lispvalues.LispLambda;
+import com.funrep.lispinjava.lispvalues.LispList;
+import com.funrep.lispinjava.lispvalues.LispPrimitive;
+import com.funrep.lispinjava.lispvalues.LispSymbol;
+import com.funrep.lispinjava.lispvalues.LispValue;
+
 public class Environment {
 	static public HashMap<String, LispValue> env = new HashMap<String, LispValue>();
 	

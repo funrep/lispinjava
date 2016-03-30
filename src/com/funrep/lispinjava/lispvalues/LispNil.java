@@ -1,4 +1,4 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ public class LispNil extends LispValue {
 	}
 
 	@Override
-	String show() {
+	public String show() {
 		return "nil";
 	}
 
@@ -26,7 +26,7 @@ public class LispNil extends LispValue {
 	}
 
 	@Override
-    HashMap<String, LispValue> getEnv() {
+	public HashMap<String, LispValue> getEnv() {
 	    return env;
     }
 }

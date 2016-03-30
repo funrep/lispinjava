@@ -3,6 +3,10 @@ package com.funrep.lispinjava;
 import java.util.List;
 import java.util.Scanner;
 
+import com.funrep.lispinjava.lispvalues.LispList;
+import com.funrep.lispinjava.lispvalues.LispValue;
+import com.funrep.lispinjava.parsing.Parsing;
+
 public class Interpreter {
 
 	public static void main(String[] args) {

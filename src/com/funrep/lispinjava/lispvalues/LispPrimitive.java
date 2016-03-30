@@ -1,4 +1,4 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class LispPrimitive extends LispValue {
 	}
 
 	@Override
-	String show() {
+	public String show() {
 		return function;
 	}
 
@@ -56,7 +56,7 @@ public class LispPrimitive extends LispValue {
 	}
 
 	@Override
-    HashMap<String, LispValue> getEnv() {
+	public HashMap<String, LispValue> getEnv() {
 	    return env;
     }
 }

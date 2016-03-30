@@ -1,4 +1,4 @@
-package com.funrep.lispinjava;
+package com.funrep.lispinjava.lispvalues;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +18,7 @@ public class LispBool extends LispValue {
 	}
 
 	@Override
-	String show() {
+	public String show() {
 		if (bool) {
 			return "true";
 		} else {
@@ -32,7 +32,7 @@ public class LispBool extends LispValue {
 	}
 
 	@Override
-    HashMap<String, LispValue> getEnv() {
+	public HashMap<String, LispValue> getEnv() {
 	    return env;
     }
 
