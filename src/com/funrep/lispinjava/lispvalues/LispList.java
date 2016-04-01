@@ -24,15 +24,21 @@ public class LispList extends LispValue {
 			case "quote":
 				return list.get(1);
 			case "define":
-				LispSymbol var = (LispSymbol) list.get(1);
+				LispSymbol name = (LispSymbol) list.get(1);
 				LispValue val = list.get(2);
 				if (val instanceof LispList) {
 					val = ((LispList) val).list.get(0).eval();
 				} else {
 					val = val.eval();
 				}
-				env.put(var.symbol, val);
+				env.put(name.symbol, val);
 				return val;
+			case "set!":
+				LispSymbol var = (LispSymbol) list.get(1);
+				LispValue newVal = list.get(2).eval();
+				env.remove(var.symbol);
+				env.put(var.symbol, newVal);
+				return newVal;
 			case "if":
 				LispBool pred = (LispBool) list.get(1).eval();
 				LispValue conseq = list.get(2);
