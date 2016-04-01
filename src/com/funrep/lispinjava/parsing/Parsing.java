@@ -14,7 +14,7 @@ import com.funrep.lispinjava.lispvalues.LispValue;
 import com.funrep.lispinjava.utils.Tuple;
 
 public class Parsing {
-	public static LispList magic(HashMap<String, LispValue> env, String s) {
+	public static LispValue magic(HashMap<String, LispValue> env, String s) {
 		return parse(env, tokenize(s), 1).left;
 	}
 	public static ArrayList<String> tokenize(String s) {
@@ -29,16 +29,17 @@ public class Parsing {
 		return tokens;
 	}
 
-	public static Tuple<LispList, Integer> parse(HashMap<String, LispValue> env, List<String> tokens, int startPos) {
+	public static Tuple<LispValue, Integer> parse(HashMap<String, LispValue> env,
+			List<String> tokens, int startPos) {
 		if (tokens.size() == 0) {
 			throw new Error("Empty string passed to AST.parse");
 		}
 		int num = 0;
-		Tuple<LispList, Integer> result;
 		if (tokens.get(0).equals("(")) {
 			LispList expr = new LispList(env);
 			int i = startPos;
 			boolean lambdaFlag = false;
+			Tuple<LispValue, Integer> result;
 			while ((!tokens.get(i).equals(")") && (i < tokens.size()))) {
 				switch (tokens.get(i)) {
 				case "true":
@@ -51,7 +52,7 @@ public class Parsing {
 					num += 7; // lambda's symbol and parentheses tokens
 					List<String> subTokens = tokens.subList(i + 1, tokens.size());
 					result = parse(env, subTokens, 1);
-					LispList symbols = result.left;
+					LispList symbols = (LispList) result.left;
 					num += result.right;
 					LispLambda lambda = new LispLambda(env, new ArrayList<String>(), new LispList(env));
 					for (LispValue s : symbols.list) {
@@ -70,7 +71,7 @@ public class Parsing {
 					}
 					List<String> subTokens2 = tokens.subList(endOfParams + 1, tokens.size());
 					result = parse(env, subTokens2, 1);
-					lambda.body = result.left;
+					lambda.body = (LispList) result.left;
 					num += result.right;
 					i = result.right;
 					expr.list.add(lambda);
@@ -100,7 +101,29 @@ public class Parsing {
 				num += 1;
 			}
 			// System.out.println(expr.show() + " " + num);
-			return new Tuple<LispList, Integer>(expr, num);
+			return new Tuple<LispValue, Integer>(expr, num);
+		} else if (tokens.size() == 1) {
+			LispValue val;
+			switch (tokens.get(0)) {
+			case "true":
+				val = new LispBool(env, true);
+				break;
+			case "false":
+				val = new LispBool(env, false);
+				break;
+			default:
+				if (tokens.get(0).charAt(0) == '"') {
+					val = new LispString(env, tokens.get(0).replaceAll("\"", ""));
+					break;
+				} else if (isNumber(tokens.get(0).charAt(0))) {
+					val = new LispNumber(env, Double.parseDouble(tokens.get(0)));
+					break;
+				} else {
+					val = new LispSymbol(env, tokens.get(0));
+					break;
+				}
+			}
+			return new Tuple<LispValue, Integer>(val, 1);
 		}
 		System.out.println("null in Parsing.parse()");
 		return null;

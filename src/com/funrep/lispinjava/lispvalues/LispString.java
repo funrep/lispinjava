@@ -13,7 +13,7 @@ public class LispString extends LispValue {
 	}
 	
 	@Override
-	LispValue eval() {
+	public LispValue eval() {
 		return this;
 	}
 

@@ -14,7 +14,7 @@ public class LispPrimitive extends LispValue {
 	}
 
 	@Override
-	LispValue eval() {
+	public LispValue eval() {
 		return null;
 	}
 

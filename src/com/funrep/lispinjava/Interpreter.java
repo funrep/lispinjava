@@ -47,7 +47,7 @@ public class Interpreter {
 			System.out.print(str + " ");
 		}
 		System.out.println("");
-		LispList expr = Parsing.parse(Environment.env, tokens, 1).left;
+		LispList expr = (LispList) Parsing.parse(Environment.env, tokens, 1).left;
 		System.out.println(expr.getClass().getSimpleName());
 		for (LispValue val : expr.list) {
 			System.out.println(val.getClass().getSimpleName());

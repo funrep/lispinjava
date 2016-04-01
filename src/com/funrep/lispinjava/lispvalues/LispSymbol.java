@@ -13,7 +13,7 @@ public class LispSymbol extends LispValue {
 	}
 
 	@Override
-	LispValue eval() {
+	public LispValue eval() {
 		return env.get(symbol);
 	}
 

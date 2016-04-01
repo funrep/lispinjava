@@ -11,7 +11,7 @@ public class LispError extends LispValue {
 	}
 	
 	@Override
-	LispValue eval() {
+	public LispValue eval() {
 		return this;
 	}
 

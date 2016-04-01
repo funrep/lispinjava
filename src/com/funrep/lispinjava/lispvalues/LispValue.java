@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class LispValue {
-	abstract LispValue eval();
+	public abstract LispValue eval();
 	public abstract String show();
-	abstract LispList apply(List<LispValue> args) throws Exception;
+	abstract LispList apply(List<LispValue> args);
 	public abstract HashMap<String, LispValue> getEnv();
 }

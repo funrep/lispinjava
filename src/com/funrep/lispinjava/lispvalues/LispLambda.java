@@ -22,7 +22,7 @@ public class LispLambda extends LispValue {
 	}
 
 	@Override
-	LispValue eval() {
+	public LispValue eval() {
 		return this;
 	}
 
