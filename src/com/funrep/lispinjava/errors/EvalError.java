@@ -5,7 +5,7 @@ import com.funrep.lispinjava.lispvalues.LispError;
 public class EvalError extends LispError {
 
 	public EvalError() {
-	    super("The expression did not match any of the evaluation rules.");
+	    super("Invalid expression.");
     }
 
 }

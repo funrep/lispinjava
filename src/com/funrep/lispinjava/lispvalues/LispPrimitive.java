@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.funrep.lispinjava.errors.TypeError;
+
 public class LispPrimitive extends LispValue {
 	public String function;
 	public HashMap<String, LispValue> env;
@@ -39,16 +41,30 @@ public class LispPrimitive extends LispValue {
 		case "+":
 			double sum = 0;
 			for (LispValue val : args) {
-				LispNumber num = (LispNumber) val;
-				sum += num.number;
+				if (val instanceof LispNumber) {
+					LispNumber num = (LispNumber) val;
+					sum += num.number;
+				} else {
+					return new TypeError();
+				}
 			}
 			return new LispNumber(env, sum);
 		case "-":
-			LispNumber n = (LispNumber) args.get(0);
-			double sum1 = n.number;
+			LispNumber n;
+			double sum1;
+			if (args.get(0) instanceof LispNumber) {
+				n = (LispNumber) args.get(0);
+				sum1 = n.number;
+			} else {
+				return new TypeError();
+			}
 			for (int i = 1; i < args.size(); i++) {
-				n = (LispNumber) args.get(i);
-				sum1 -= n.number;
+				if (args.get(i) instanceof LispNumber) {
+					n = (LispNumber) args.get(i);
+					sum1 -= n.number;
+				} else {
+					return new TypeError();
+				}
 			}
 			return new LispNumber(env, sum1);
 		case "equal?":
@@ -85,6 +101,39 @@ public class LispPrimitive extends LispValue {
 						return new LispBool(env, true);
 					}
 				}
+			}
+			break;
+		case "cons":
+			LispList head = new LispList(env);
+			if (args.get(1) instanceof LispNil) {
+				head.list.add(args.get(0));
+				return head;
+			} else if (args.get(1) instanceof LispList) {
+				head.list.add(args.get(0));
+				LispList tail = (LispList) args.get(1);
+				head.list.addAll(tail.list);
+				return head;
+			} else {
+				return new TypeError();
+			}
+		case "head":
+			if (args.get(0) instanceof LispList) {
+				LispList lst = (LispList) args.get(0);
+				if (lst.list.size() == 0) {
+					return new LispNil(env);
+				} else {
+					return lst.list.get(0);
+				}
+			} else {
+				return new TypeError();
+			}
+		case "tail":
+			if (args.get(0) instanceof LispList) {
+				LispList lst = (LispList) args.get(0);
+				lst.list = new ArrayList<LispValue>(lst.list.subList(1, lst.list.size()));
+				return lst;
+			} else {
+				return new TypeError();
 			}
 		}
 		return null;

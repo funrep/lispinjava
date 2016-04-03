@@ -12,5 +12,8 @@ public class Environment {
 		env.put("+", new LispPrimitive(env, "+"));
 		env.put("-", new LispPrimitive(env, "-"));
 		env.put("equal?", new  LispPrimitive(env, "equal?"));
+		env.put("cons", new LispPrimitive(env, "cons"));
+		env.put("head", new LispPrimitive(env, "head"));
+		env.put("tail", new LispPrimitive(env, "tail"));
 	}
 }

@@ -27,7 +27,12 @@ public class LispList extends LispValue {
 				LispSymbol name = (LispSymbol) list.get(1);
 				LispValue val = list.get(2);
 				if (val instanceof LispList) {
-					val = ((LispList) val).list.get(0).eval();
+					LispList lst = (LispList) val;
+					if (lst.list.get(0) instanceof LispLambda) {
+						val = ((LispList) val).list.get(0).eval();
+					} else {
+						val = lst.eval();
+					}
 				} else {
 					val = val.eval();
 				}

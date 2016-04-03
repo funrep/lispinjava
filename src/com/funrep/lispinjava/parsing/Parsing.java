@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.funrep.lispinjava.lispvalues.LispBool;
-import com.funrep.lispinjava.lispvalues.LispLambda;
-import com.funrep.lispinjava.lispvalues.LispList;
-import com.funrep.lispinjava.lispvalues.LispNumber;
-import com.funrep.lispinjava.lispvalues.LispString;
-import com.funrep.lispinjava.lispvalues.LispSymbol;
-import com.funrep.lispinjava.lispvalues.LispValue;
+import com.funrep.lispinjava.lispvalues.*;
 import com.funrep.lispinjava.utils.Tuple;
 
 public class Parsing {
@@ -47,6 +41,9 @@ public class Parsing {
 					break;
 				case "false":
 					expr.list.add(new LispBool(env, false));
+					break;
+				case "nil":
+					expr.list.add(new LispNil(env));
 					break;
 				case "lambda":
 					num += 7; // lambda's symbol and parentheses tokens
@@ -110,6 +107,9 @@ public class Parsing {
 				break;
 			case "false":
 				val = new LispBool(env, false);
+				break;
+			case "nil":
+				val = new LispNil(env);
 				break;
 			default:
 				if (tokens.get(0).charAt(0) == '"') {
